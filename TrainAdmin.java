@@ -4,6 +4,7 @@
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.FileWriter;
 
 public class TrainAdmin {
 	
@@ -30,6 +31,14 @@ public class TrainAdmin {
 		addRoute();
 		addDelay();
 		deleteRoute();
+		
+		// This exports the new data points into the already existing TrainSchedule document
+		FileWriter newSchedule = new FileWriter("C:\\Users\\Public\\Documents\\TrainSchedule.txt");
+		for (int i = 0; i < Origin.size(); i++)
+		{
+			newSchedule.write(Origin.get(i)+"-"+Destination.get(i)+"-"+DepartureTime.get(i)+"-"+ArrivalTime.get(i)+System.lineSeparator());
+		}
+		newSchedule.close();
 	}
 	
 	public static void read(FileReader file) throws IOException
