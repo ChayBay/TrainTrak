@@ -2,113 +2,181 @@
 // if anyone looks at this, this is the original template to test gui sorry!!
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
  
 public class TrainTrak {
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
+        new mainMenu();
+    }
+}
+
+class mainMenu extends JFrame{
+	public static mainMenu menu;
+	
+	public static void main() throws IOException {
+		mainMenu menu = new mainMenu();
+		adminPopup.menuClose = menu;
+	}
+	
+	public mainMenu() throws IOException {
 		
-        gui();
-        
-    }
- 
-    public static void gui(){
-    	int padX = 100;
-    	int padY = 100;
-    	
-    	// Function to set title of JFrame.
-        JFrame f = new JFrame("Main Menu");
-        // set the layout
-        f.setLayout(new GridBagLayout());
- 
-        // creates a constraints object
-        GridBagConstraints c = new GridBagConstraints();
-        // insets for all components
-        c.insets = new Insets(20,20,20,20);
-        
-        c.gridx = 1;
-        c.gridy = 0;
-        c.ipadx = padX;
-        c.ipady = padY;
-        c.fill = GridBagConstraints.BOTH;
-        c.anchor = GridBagConstraints.CENTER;
-        JLabel TrainTrak = new JLabel("Train Trak");
-        TrainTrak.setHorizontalAlignment(JLabel.CENTER);
-        f.add(TrainTrak, c);
- 		
-        
-        // column
-        c.gridx = 1;
-        // row
-        c.gridy = 1;
-        // width
-        c.ipadx = padX;
-        c.fill = GridBagConstraints.BOTH;
-        // height
-        c.ipady = padY;
-        JPanel MenuButtons = new JPanel();
-        MenuButtons.setLayout(new GridLayout(1,0,20,0));
-        JButton b1 = new JButton("Buy A Ticket");
-        JButton b2 = new JButton("Select A Destination");
-        JButton b3 = new JButton("Train Schedule");
-        MenuButtons.add(b1);
-        MenuButtons.add(b2);
-        MenuButtons.add(b3);
-        f.add(MenuButtons, c);
-        
-        
-        // add the searchbar
-        JPanel SearchBar = new JPanel(); // the panel is not visible in output
-        SearchBar.setLayout(new GridBagLayout());
-        GridBagConstraints sbc = new GridBagConstraints();
-        sbc.insets = new Insets(2,2,2,2);
-        
-        sbc.gridx = 0;
-        sbc.gridy = 0;
-        sbc.ipadx = 10;
-        sbc.ipady = 10;
-        SearchBar.add(new JLabel("Enter Train Info"),sbc);
-        
-        sbc.gridx = 0;
-        sbc.gridy = 1;
-        sbc.fill = GridBagConstraints.BOTH;
-        //sbc.ipadx = 10;
-        //sbc.ipady = 10;
-        SearchBar.add(new JTextField(15),sbc);
-        
-        JPanel ActionButtons = new JPanel();
-        ActionButtons.setLayout(new FlowLayout());//gamer move
-        ActionButtons.add(new JButton("Search"));
-        // need to put the last buttons in its own panel
-        sbc.gridx = 0;
-        sbc.gridy = 2;
-        sbc.ipadx = 10;
-        sbc.ipady = 10;
-        SearchBar.add(ActionButtons,sbc);
-        //end of searchbar panel
-        
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 3;
-        c.ipadx = 20;
-        c.ipady = 20;
-        f.add(SearchBar, c);
- 
-        // Creating Object of "wndcloser"
-        // class of windowlistener
-        WindowListener wndCloser = new WindowAdapter() {
- 
-            public void windowClosing(WindowEvent e)
-            {
-                // exit the system
-                System.exit(0);
-            }
-        };
-        // add the actionwindowlistener
-        f.addWindowListener(wndCloser);
-        f.getContentPane();
-        f.setSize(700, 700);
-        f.setVisible(true);
-    }
+		int padX = 100;
+		int padY = 100;
+		
+		setTitle("Main Menu");
+		 // set the layout
+	    setLayout(new GridBagLayout());
+	    // creates a constraints object
+	    GridBagConstraints c = new GridBagConstraints();
+	    // insets for all components
+	    c.insets = new Insets(20,20,20,20);
+	    //stays constant for all main panel items
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    //
+	    
+	    c.gridx = 0; // column
+	    c.gridy = 0; // row
+	    c.ipady = padY;
+	    c.anchor = GridBagConstraints.CENTER;
+	    JLabel TrainTrak = new JLabel("Train Trak");
+	    TrainTrak.setFont(new Font("Comic Sans MS", Font.BOLD,30));
+	    TrainTrak.setHorizontalAlignment(JLabel.CENTER);
+	    add(TrainTrak, c);
+			
+	    c.gridx = 0;
+	    c.gridy = 1;
+	    c.ipady = 20;
+	    c.anchor = GridBagConstraints.CENTER;
+	    //This path may change depening on where you have the image in your desktop
+	    //I will add the image with the push
+	    String path = "C:\\Users\\Edene\\Desktop\\540\\project things\\tommy.jfif";
+	    File picFile = new File(path);
+	    BufferedImage trainPic = ImageIO.read(picFile);
+	    /*
+	    dont know how to resize images yet
+	    am using smaller picture currently
+	    BufferedImage trainResize = Scalr.resize(trainPic, 200);
+	    JLabel trainLabel = new JLabel(new ImageIcon(trainResize));
+	    */
+	    JLabel trainLabel = new JLabel(new ImageIcon(trainPic));
+	    add(trainLabel, c);
+	
+	    c.gridx = 0;
+	    c.gridy = 2;
+	    c.anchor = GridBagConstraints.NORTH;
+	    c.weightx = 2;
+	    c.weighty = 2;
+	    JPanel MenuButtons = new JPanel();
+	    MenuButtons.setLayout(new GridBagLayout());
+	    GridBagConstraints mbc = new GridBagConstraints();
+	    mbc.insets = new Insets(20,20,20,20);
+	    
+	    //these are constant for both buttons
+	    mbc.weightx = 2;
+	    mbc.ipady = 20;
+	    mbc.fill = GridBagConstraints.BOTH;
+	    mbc.anchor = GridBagConstraints.CENTER;
+	    
+	    mbc.gridx = 0;
+	    mbc.gridy = 0;
+	    JButton user = new JButton("USER");
+	    MenuButtons.add(user, mbc);
+	    
+	    mbc.gridx = 1;
+	    mbc.gridy = 0;
+	    JButton admin = new JButton("ADMIN");
+	    admin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new adminPopup(menu);
+			}
+	    });
+	    MenuButtons.add(admin, mbc);
+	    add(MenuButtons, c);
+	    getContentPane();
+	    setSize(700, 700);
+	    setVisible(true);
+	}
+}
+
+class adminPopup extends JFrame{
+	
+	public static adminPopup log;
+	public static mainMenu menuClose;
+	
+	public static void main() {
+		adminPopup log = new adminPopup(menuClose);
+	}
+
+	public adminPopup(JFrame menuClose) {
+	    
+		setTitle("Login");
+		setLayout(new GridBagLayout());
+		GridBagConstraints l = new GridBagConstraints();
+		l.insets = new Insets(20,20,20,20);
+		
+		l.gridx = 0;
+		l.gridy = 0;
+		add(new JLabel("Username"), l);
+		
+		l.gridx = 1;
+		l.gridy = 0;
+		l.fill = GridBagConstraints.BOTH;
+		JTextField userField = new JTextField(20);
+		add(userField, l);
+		
+		l.gridx = 0;
+		l.gridy = 1;
+		add(new JLabel("Password"), l);
+		
+		l.gridx = 1;
+		l.gridy = 1;
+		l.fill = GridBagConstraints.BOTH;
+		JPasswordField passField = new JPasswordField(20);
+		add(passField, l);
+		
+		l.gridx = 0;
+		l.gridy = 2;
+		l.weightx = 2;
+		JButton submit = new JButton("Submit");
+		//if (someCode()==true)
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new adminPage();
+				menuClose.dispose();
+				log.dispose();
+			}
+		});
+		
+		add(submit, l);
+	    getContentPane();
+	    setSize(300, 300);
+	    setVisible(true);	
+	}
+}
+
+class adminPage extends JFrame{
+	static JFrame adPage;
+	 
+	public static void main() throws IOException {
+	    	adPage = new JFrame("Admin Page");
+	}
+	 
+	public adminPage() {
+		setLayout(new GridBagLayout());
+	    GridBagConstraints ad = new GridBagConstraints();
+	    ad.insets = new Insets(20,20,20,20);
+	        
+	    ad.gridx = 0;
+	    ad.gridy = 0;
+	    add(new JLabel("You Win"), ad);
+	    getContentPane();
+	    setSize(700, 700);
+	    setVisible(true);
+	}
 }
