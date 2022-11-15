@@ -55,7 +55,7 @@ class mainMenu extends JFrame{
 	    c.anchor = GridBagConstraints.CENTER;
 	    //This path may change depening on where you have the image in your desktop
 	    //I will add the image with the push
-	    String path = "C:\\Users\\Edene\\Desktop\\540\\project things\\tommy.jfif";
+	    String path = "C:\\Users\\Edene\\Desktop\\540\\project things\\trainTrakPull\\tommy.jfif";
 	    File picFile = new File(path);
 	    BufferedImage trainPic = ImageIO.read(picFile);
 	    /*
@@ -86,6 +86,12 @@ class mainMenu extends JFrame{
 	    mbc.gridx = 0;
 	    mbc.gridy = 0;
 	    JButton user = new JButton("USER");
+	    user.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new userPage();
+				menu.dispose();
+			}
+	    });
 	    MenuButtons.add(user, mbc);
 	    
 	    mbc.gridx = 1;
@@ -117,45 +123,68 @@ class adminPopup extends JFrame{
 	    
 		setTitle("Login");
 		setLayout(new GridBagLayout());
-		GridBagConstraints l = new GridBagConstraints();
-		l.insets = new Insets(20,20,20,20);
+		GridBagConstraints out = new GridBagConstraints();
+		out.insets = new Insets(20,20,20,20);
+		out.anchor = GridBagConstraints.CENTER;
+		out.fill = GridBagConstraints.BOTH;
 		
-		l.gridx = 0;
-		l.gridy = 0;
-		add(new JLabel("Username"), l);
+		JPanel topAd = new JPanel();
+		topAd.setLayout(new GridBagLayout());
+		GridBagConstraints inner1 = new GridBagConstraints();
+		inner1.insets = new Insets(20,20,20,20);
+		inner1.fill = GridBagConstraints.BOTH;
 		
-		l.gridx = 1;
-		l.gridy = 0;
-		l.fill = GridBagConstraints.BOTH;
+		inner1.gridx = 0;
+		inner1.gridy = 0;
+		topAd.add(new JLabel("Username"), inner1);
+		
+		inner1.gridx = 1;
+		inner1.gridy = 0;
 		JTextField userField = new JTextField(20);
-		add(userField, l);
+		userField.setColumns(20);
+		topAd.add(userField, inner1);
 		
-		l.gridx = 0;
-		l.gridy = 1;
-		add(new JLabel("Password"), l);
+		inner1.gridx = 0;
+		inner1.gridy = 1;
+		topAd.add(new JLabel("Password"), inner1);
 		
-		l.gridx = 1;
-		l.gridy = 1;
-		l.fill = GridBagConstraints.BOTH;
+		inner1.gridx = 1;
+		inner1.gridy = 1;
 		JPasswordField passField = new JPasswordField(20);
-		add(passField, l);
+		passField.setColumns(20);
+		topAd.add(passField, inner1);
 		
-		l.gridx = 0;
-		l.gridy = 2;
-		l.weightx = 2;
+		out.gridx = 0;
+		out.gridy = 0;
+		add(topAd, out);
+		
+		JPanel subHolder = new JPanel();
+		subHolder.setLayout(new GridBagLayout());
+		GridBagConstraints s = new GridBagConstraints();
+		s.insets = new Insets(20,20,20,20);
+		s.gridx = 0;
+		s.gridy = 0;
+		s.fill = GridBagConstraints.BOTH;
+		s.anchor = GridBagConstraints.CENTER;
 		JButton submit = new JButton("Submit");
-		//if (someCode()==true)
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//if (User.login==true) do stuff
+				
 				new adminPage();
+				//these dont wORKKKKKKKKKKKKKKKKKKKKKKKK
 				menuClose.dispose();
 				log.dispose();
 			}
 		});
+		subHolder.add(submit,s);
 		
-		add(submit, l);
+		out.gridx = 0;
+		out.gridy = 1;
+		add(subHolder, out);
+		
 	    getContentPane();
-	    setSize(300, 300);
+	    setSize(420, 305);
 	    setVisible(true);	
 	}
 }
@@ -171,12 +200,173 @@ class adminPage extends JFrame{
 		setLayout(new GridBagLayout());
 	    GridBagConstraints ad = new GridBagConstraints();
 	    ad.insets = new Insets(20,20,20,20);
-	        
+	    
+	    
 	    ad.gridx = 0;
 	    ad.gridy = 0;
-	    add(new JLabel("You Win"), ad);
+	    ad.anchor = GridBagConstraints.NORTH;
+	    ad.fill = GridBagConstraints.HORIZONTAL;
+	    JPanel topButtons = new JPanel();
+	    topButtons.setLayout(new GridBagLayout());
+	    GridBagConstraints tb = new GridBagConstraints();
+	    tb.insets = new Insets(20,20,20,20);
+	    
+	    //these are constant for both buttons
+	    tb.weightx = 2;
+	    tb.ipady = 20;
+	    tb.fill = GridBagConstraints.HORIZONTAL;
+	    tb.anchor = GridBagConstraints.NORTH;
+	    
+	    tb.gridx = 0;
+	    tb.gridy = 0;
+	    JButton home =  new JButton("Home");
+	    topButtons.add(home, tb);
+	    
+	    tb.gridx = 1;
+	    tb.gridy = 0;
+	    JButton addR =  new JButton("Add Route");
+	    topButtons.add(addR, tb);
+	    add(topButtons, ad);
+	    
+	    //make a call to get the train data and train obj array
+	    int[] trainSched = new int[] {0,1,2,3,4,5,6,7,8,9};
+	    
+	    ad.gridx = 0;
+	    ad.gridy = 1;
+	    ad.anchor = GridBagConstraints.NORTH;
+	    ad.fill = GridBagConstraints.BOTH;
+	    
+	    
+	    JPanel routes =  new JPanel();
+	    routes.setLayout(new GridBagLayout());
+	    GridBagConstraints loop = new GridBagConstraints();
+	    loop.insets = new Insets(20,20,20,20);
+	    loop.gridx = 0;
+	    loop.gridy = 0;
+	    for (int i = 0; i<trainSched.length; i++) {
+	    	JPanel train = new JPanel();
+	    	train.setLayout(new FlowLayout());
+	    	train.add(new JLabel("train"+i));
+	    	train.add(new JLabel("destination"));
+	    	train.add(new JLabel("origin"));
+	    	train.add(new JButton("Delete"));
+	    	train.add(new JButton("Delay"));
+	    	if (loop.gridy >= (trainSched.length)/2) {
+	    		System.out.println("HERE");
+	    		loop.gridx += 1;
+	    		loop.gridy = 0;
+	    	}
+	    	//biigg issue
+	    	loop.anchor = GridBagConstraints.CENTER;
+		    loop.fill = GridBagConstraints.HORIZONTAL;
+	    	routes.add(train,loop);
+	    	loop.gridy += 1;
+	    }
+	    
+	    add(routes, ad);
+	    
 	    getContentPane();
 	    setSize(700, 700);
+	    setVisible(true);
+	}
+}
+
+class userPage extends JFrame{
+	static JFrame usePage;
+	 
+	public static void main() throws IOException {
+	    	usePage = new JFrame("User Page");
+	}
+	 
+	public userPage() {
+		setLayout(new GridBagLayout());
+	    GridBagConstraints us = new GridBagConstraints();
+	    us.insets = new Insets(20,20,20,20);
+	    
+	    
+	    us.gridx = 0;
+	    us.gridy = 0;
+	    us.anchor = GridBagConstraints.NORTH;
+	    us.fill = GridBagConstraints.HORIZONTAL;
+	    JPanel topButtons = new JPanel();
+	    topButtons.setLayout(new GridBagLayout());
+	    GridBagConstraints tb = new GridBagConstraints();
+	    tb.insets = new Insets(20,20,20,20);
+	    
+	    //these are constant for both buttons
+	    //tb.weightx = 2;
+	    tb.ipady = 20;
+	    tb.fill = GridBagConstraints.HORIZONTAL;
+	    tb.anchor = GridBagConstraints.NORTH;
+	    
+	    tb.gridx = 0;
+	    tb.gridy = 0;
+	    JButton home =  new JButton("Home");
+	    topButtons.add(home, tb);
+	    
+	    tb.gridx = 1;
+	    tb.gridy = 0;
+	    JButton orig =  new JButton("Origin Filter");
+	    topButtons.add(orig, tb);
+	    add(topButtons, us);
+	    
+	    tb.gridx = 2;
+	    tb.gridy = 0;
+	    JButton dest =  new JButton("Destination Filter");
+	    topButtons.add(dest, tb);
+	    add(topButtons, us);
+	    
+	    tb.gridx = 3;
+	    tb.gridy = 0;
+	    JButton depart =  new JButton("Departure Filter");
+	    topButtons.add(depart, tb);
+	    add(topButtons, us);
+	    
+	    tb.gridx = 4;
+	    tb.gridy = 0;
+	    JButton arriv =  new JButton("Arrival Filter");
+	    topButtons.add(arriv, tb);
+	    add(topButtons, us);
+	    
+	    //make a call to get the train data and train obj array
+	    int[] trainSched = new int[] {0,1,2,3,4,5,6,7,8,9};
+	    
+	    us.gridx = 0;
+	    us.gridy = 1;
+	    us.anchor = GridBagConstraints.NORTH;
+	    us.fill = GridBagConstraints.BOTH;
+	    
+	    
+	    JPanel routes =  new JPanel();
+	    routes.setLayout(new GridBagLayout());
+	    GridBagConstraints loop = new GridBagConstraints();
+	    loop.insets = new Insets(20,20,20,20);
+	    loop.gridx = 0;
+	    loop.gridy = 0;
+	    for (int i = 0; i<trainSched.length; i++) {
+	    	JPanel train = new JPanel();
+	    	train.setLayout(new FlowLayout());
+	    	train.add(new JLabel("train"+i));
+	    	train.add(new JLabel("destination"));
+	    	train.add(new JLabel("origin"));
+	    	train.add(new JButton("Delete"));
+	    	train.add(new JButton("Delay"));
+	    	if (loop.gridy >= (trainSched.length)/2) {
+	    		System.out.println("HERE");
+	    		loop.gridx += 1;
+	    		loop.gridy = 0;
+	    	}
+	    	//biigg issue
+	    	loop.anchor = GridBagConstraints.CENTER;
+		    loop.fill = GridBagConstraints.HORIZONTAL;
+	    	routes.add(train,loop);
+	    	loop.gridy += 1;
+	    }
+	    
+	    add(routes, us);
+	    
+	    getContentPane();
+	    setSize(750, 750);
 	    setVisible(true);
 	}
 }
