@@ -1,101 +1,51 @@
 // Made by Connor Shipman
 // Much of this code can be refined to work better or look cleaner.  This is a basic draft and outline of the adding routes and delays.
-
 import java.io.*;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.io.FileWriter;
+import java.util.Vector;
+
 
 public class TrainAdmin {
 	
-	public static ArrayList<String> Origin = new ArrayList<String>();
-	public static ArrayList<String> Destination = new ArrayList<String>();
-	public static ArrayList<String> DepartureTime = new ArrayList<String>();
-	public static ArrayList<String> ArrivalTime = new ArrayList<String>();
+	public static Vector<Train> trainConvert = new Vector<Train>();
 
-	public static void main(String[] args) throws Exception
-	{
-		FileReader file = new FileReader("C:\\Users\\Public\\Documents\\TrainSchedule.txt"); //replace with the location of the text file
-		
+	public static void main(String[] args) throws IOException {
+		FileReader file = new FileReader("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\TrainSchedule.txt"); //replace with the location of the text file
 		
 		// This reads the file and separates them into each of the public ArrayLists		
 		read(file);
+		printTrains();
+		//System.out.println();
+		//System.out.println("Were going to add one here");
+		//addTrain("New Port", "On A Porch", "0010", "0020");
+		//addDelay(5, 30); THIS DOESN'T APPEND THE 00 TO THE FRONT OF MILITARY TIME
+		//THIS IS JUST A MATH ISSUE CAN BE SOLVED EASILY
+		//deleteTrain(5);
+		//Working with train Object and train Vector
+		//System.out.println();
+		//printTrains();
 		
-		// This prints out all the Train Schedules one entry at a time
-		for(int i = 0; i < Origin.size(); i++)
-		{
-			System.out.println(Origin.get(i)+"-"+Destination.get(i)+"-"+DepartureTime.get(i)+"-"+ArrivalTime.get(i));
-		}
-		
-		// These are here to test the functions below
-		addRoute();
-		addDelay();
-		deleteRoute();
-		
-		// This exports the new data points into the already existing TrainSchedule document
-		FileWriter newSchedule = new FileWriter("C:\\Users\\Public\\Documents\\TrainSchedule.txt");
-		for (int i = 0; i < Origin.size(); i++)
-		{
-			newSchedule.write(Origin.get(i)+"-"+Destination.get(i)+"-"+DepartureTime.get(i)+"-"+ArrivalTime.get(i)+System.lineSeparator());
-		}
-		newSchedule.close();
-	}
-	
-	public static void read(FileReader file) throws IOException
-	{
-		Scanner temp = new Scanner(file);
-		
-		//This tests the file, reading it until it reaches the end of the file
-		while (temp.hasNext()) {
-			//Here, we have the file being read, each data point being split by a -, and separating it into a string array
-			String[] data = temp.nextLine().split("-");
-			// These add each data point into their respective ArrayList, again all being in order and separated by a -
-			Origin.add(data[0]);
-			Destination.add(data[1]);
-			DepartureTime.add(data[2]);
-			ArrivalTime.add(data[3]);
-		}
-	}
-	
-	public static void addRoute() {
-		Scanner temp = new Scanner(System.in);
-		
-		// This simply asks for all the details of the new route, prompting the user to enter in new information for the route
-		System.out.print("Where is the Origin of your route? ");
-		String origin = temp.nextLine();
-		
-		System.out.print("What is the Destination of your route? ");
-		String destination = temp.nextLine();
-		
-		System.out.print("When is the Departure Time? ");
-		String departure = temp.nextLine();
-		
-		System.out.print("When is the expected Arrival Time? ");
-		String arrival = temp.nextLine();
-		
-		// After all the information is gathered, add all the information to the public ArrayLists.
-		Origin.add(origin);
-		Destination.add(destination);
-		DepartureTime.add(departure);
-		ArrivalTime.add(arrival);
 		
 	}
 	
-	public static void addDelay() {
-		Scanner temp = new Scanner(System.in);
+	public static void Initialize() throws IOException {
 		
-		// This will prompt the user to give the system a number, that number will be matched with the index in the departure time and arrival time
-		System.out.println("Which route would you like to add a delay to? ");
-		int route = temp.nextInt();
-		
-		// This will prompt the user to give the estimated delay
-		System.out.println("How long will the delay be? ");
-		int delay = temp.nextInt();
-		
-		// This is used to get the departure and arrival time of the route the admin requested, changing them from a string to an integer in the process
-		int departure = Integer.parseInt(DepartureTime.get(route));
-		int arrival = Integer.parseInt(ArrivalTime.get(route));
-		
+		FileReader file = new FileReader("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\TrainSchedule.txt"); //replace with the location of the text file	
+		read(file);
+	}
+	
+	public static void addTrain(String Orig, String Dest, String Depart, String Arriv) throws IOException {
+		Initialize();
+		Train t = new Train(trainConvert.size(), Orig, Dest, Depart, Arriv);
+		trainConvert.add(t);
+		write();
+	}
+	
+	public static void addDelay(int ID, int delay) throws IOException {
+		Initialize();
+		Train t = trainConvert.get(ID);
+		int departure = Integer.parseInt(t.getDeparture());
+		int arrival = Integer.parseInt(t.getArrival());
 		// This adds the delay to the departure and arrival time
 		departure = departure + delay;
 		arrival = arrival + delay;
@@ -103,27 +53,61 @@ public class TrainAdmin {
 		// This changed the departure from an integer back into a string
 		String delayedDeparture = Integer.toString(departure);
 		String delayedArrival = Integer.toString(arrival);
-		
-		// This sets the route from the old departure and arrival time to the new delayed departure and arrival time
-		DepartureTime.set(route, delayedDeparture);
-		ArrivalTime.set(route, delayedArrival);
-		
+		deleteTrain(ID);
+		Train newT = new Train(ID, t.getOrigin(), t.getDestination(), delayedDeparture, delayedArrival);
+		trainConvert.add(newT);
+		write();
 	}
 	
-	public static void deleteRoute() {
-		Scanner temp = new Scanner(System.in);
-		
-		// This prompts the user to give a route to delete
-		System.out.println("Which route would you like to delete? ");
-		int route = temp.nextInt();
-		
+	public static void deleteTrain(int ID) throws IOException {
+		Initialize();
 		// This takes the value from the user and deletes each entry in that respective index
-		Origin.remove(route);
-		Destination.remove(route);
-		DepartureTime.remove(route);
-		ArrivalTime.remove(route);
+		trainConvert.removeElementAt(ID);
+		write();
+	}
+	
+	public static void read(FileReader file) throws IOException {
+		trainConvert.clear();
+		Scanner temp = new Scanner(file);
+		//This tests the file, reading it until it reaches the end of the file
+		int i = 0;
+		while (temp.hasNext()) {
+			//Here, we have the file being read, each data point being split by a -, and separating it into a string array
+			String[] data = temp.nextLine().split("-");
+			
+			String Orig = data[0];
+			String Dest = data[1];
+			String Depart = data[2];
+			String Arriv = data[3];
+			
+			Train t = new Train(i, Orig, Dest, Depart, Arriv);
+			trainConvert.add(t);
+			i++;
+		}
+	}
+	
+	public static void write() throws IOException {
+		// This exports the new data points into the already existing TrainSchedule document
+		FileWriter newSchedule = new FileWriter("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\TrainSchedule.txt");
 		
-		// This confirms the deletion
-		System.out.println("Deletion Complete");
+		for (int i = 0; i < trainConvert.size(); i++) {	
+			Train t = trainConvert.get(i);
+			newSchedule.write(t.getOrigin()+"-"+t.getDestination()+"-"+t.getDeparture()+"-"+t.getArrival()+System.lineSeparator());
+			//newSchedule.write(Origin.get(i)+"-"+Destination.get(i)+"-"+DepartureTime.get(i)+"-"+ArrivalTime.get(i)+System.lineSeparator());
+		}
+		newSchedule.close();
+	}
+
+	public static Vector<Train> send() throws IOException {
+		Initialize();
+		return trainConvert;
+	}
+	
+	//This shows that it is in there
+	public static void printTrains() {
+		for(int i = 0; i < trainConvert.size(); i++) {
+			System.out.println(trainConvert.get(i).toString());
+			System.out.println();
+		}
 	}
 }
