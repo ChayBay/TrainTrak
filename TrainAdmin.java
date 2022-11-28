@@ -1,5 +1,3 @@
-// Made by Connor Shipman
-// Much of this code can be refined to work better or look cleaner.  This is a basic draft and outline of the adding routes and delays.
 import java.io.*;
 import java.util.Scanner;
 import java.util.Vector;
@@ -31,6 +29,12 @@ public class TrainAdmin {
 	public static void Initialize() throws IOException {
 		
 		FileReader file = new FileReader("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\TrainSchedule.txt"); //replace with the location of the text file	
+		read(file);
+	}
+	
+	public static void InitializeFiltered() throws IOException {
+		
+		FileReader file = new FileReader("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\FilteredSchedule.txt"); //replace with the location of the text file	
 		read(file);
 	}
 	
@@ -97,9 +101,92 @@ public class TrainAdmin {
 		}
 		newSchedule.close();
 	}
+	
+	public static void writeFiltered(String filter, String variable) throws IOException {
+		FileWriter filteredSchedule = new FileWriter("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\FilteredSchedule.txt");
+		
+		if (filter.equalsIgnoreCase("arrival")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				Train t = trainConvert.get(i);
+				if (t.Arrival == variable) {
+					filteredSchedule.write(t.getOrigin()+"-"+t.getDestination()+"-"+t.getDeparture()+"-"+t.getArrival()+System.lineSeparator());
+				}
+			}
+		}
+		else if(filter.equalsIgnoreCase("departure")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				Train t = trainConvert.get(i);
+				if (t.Departure == variable) {
+					filteredSchedule.write(t.getOrigin()+"-"+t.getDestination()+"-"+t.getDeparture()+"-"+t.getArrival()+System.lineSeparator());
+				}
+			}
+		}
+		else if(filter.equalsIgnoreCase("origin")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				Train t = trainConvert.get(i);
+				if (t.Origin == variable) {
+					filteredSchedule.write(t.getOrigin()+"-"+t.getDestination()+"-"+t.getDeparture()+"-"+t.getArrival()+System.lineSeparator());
+				}
+			}
+		}
+		else if(filter.equalsIgnoreCase("destination")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				Train t = trainConvert.get(i);
+				if (t.Destination == variable) {
+					filteredSchedule.write(t.getOrigin()+"-"+t.getDestination()+"-"+t.getDeparture()+"-"+t.getArrival()+System.lineSeparator());
+				}
+			}
+		}
+		filteredSchedule.close();
+	}
+	
+	public static void filterFiltered(String filter, String variable) throws IOException { 
+		InitializeFiltered();
+		Vector<Train> t = new Vector<Train>();
+		
+		if (filter.equalsIgnoreCase("arrival")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				if (trainConvert.get(i).Arrival == variable) {
+					t.add(trainConvert.get(i));
+				}
+			}
+		}
+		else if(filter.equalsIgnoreCase("departure")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				if (trainConvert.get(i).Departure == variable) {
+					t.add(trainConvert.get(i));
+				}
+			}
+		}
+		else if(filter.equalsIgnoreCase("origin")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				if (trainConvert.get(i).Origin == variable) {
+					t.add(trainConvert.get(i));
+				}
+			}
+		}
+		else if(filter.equalsIgnoreCase("destination")) {
+			for (int i = 0; i < trainConvert.size(); i++) {
+				if (trainConvert.get(i).Destination == variable) {
+					t.add(trainConvert.get(i));
+				}
+			}
+		}
+		FileWriter filteredSchedule = new FileWriter("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\FilteredSchedule.txt");
+		
+		for (int i = 0; i < trainConvert.size(); i++) {	
+			filteredSchedule.write(t.get(i).Origin+"-"+t.get(i).Destination+"-"+t.get(i).Departure+"-"+t.get(i).Arrival+System.lineSeparator());
+		}
+		filteredSchedule.close();
+	}
 
 	public static Vector<Train> send() throws IOException {
 		Initialize();
+		return trainConvert;
+	}
+	
+	public static Vector<Train> sendFiltered() throws IOException {
+		InitializeFiltered();
 		return trainConvert;
 	}
 	
