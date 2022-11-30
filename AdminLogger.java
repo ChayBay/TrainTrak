@@ -1,23 +1,12 @@
+// Made By Calloway Hodges
 
+// edited by Chason Bibeau to implement an Admin Object and Vector Implementation
 import java.io.*;
 import java.util.Scanner;
 import java.util.Vector;
 
 public class AdminLogger {	
 	public static Vector<Admin> adminConvert = new Vector<Admin>();
-
-	public static void main(String[] args) throws IOException {
-		FileReader file = new FileReader("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\AdminList.txt"); //replace with the location of the text file
-		
-		// This reads the file and separates them into each of the public ArrayLists		
-		read(file);
-		printAdmins();
-		//System.out.println();
-		//addAdmin("Sally", "frunk");
-		//System.out.println();
-		//printTrains();
-		
-	}
 	
 	public static void Initialize() throws IOException {
 		

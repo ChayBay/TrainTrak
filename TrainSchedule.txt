@@ -1,3 +1,7 @@
-South Carolina-Georgia-1030-1200
+SouthCarolina-Georgia-1030-1210
+SouthCarolina-Georgia-1030-1200
+SouthCarolina-Georgia-1040-1200
+SouthCarolina-Philadelphia-1230-2300
+SouthCarolina-Philadelphia-1030-1100
 Ohio-Philadelphia-1100-1700
 Maine-New York-1400-1600

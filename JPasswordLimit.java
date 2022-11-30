@@ -4,6 +4,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
+//source: https://stackoverflow.com/questions/3519151/how-to-limit-the-number-of-characters-in-jtextfield
+//same as JTextFieldLimit but to work with a passwordField
+
 public class JPasswordLimit extends JPasswordField {
     private int limit;
 

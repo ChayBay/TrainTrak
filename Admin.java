@@ -1,3 +1,4 @@
+// Made by Chason Bibeau
 
 public class Admin {
 	String username;
