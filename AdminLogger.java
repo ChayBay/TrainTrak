@@ -28,13 +28,29 @@ public class AdminLogger {
 		return isIn;
 	}
 	
+	public static boolean doubleCheck(String userF) throws IOException {
+		Initialize();
+		boolean isIn = false;
+		
+		for (int i = 0; i < adminConvert.size(); i++) {	
+			Admin a = adminConvert.get(i);
+			if (a.getUsername().equals(userF)) {
+				System.out.println("HERE");
+				isIn = true;
+			}	
+		}
+		return isIn;
+	}
+	
 	public static void addAdmin(String user, String pass) throws IOException {
+		Initialize();
 		Admin a = new Admin(user, pass);
 		adminConvert.add(a);
 		write();
 	}
 	
 	public static void read(FileReader file) throws IOException {
+		adminConvert.clear();
 		Scanner temp = new Scanner(file);
 		//This tests the file, reading it until it reaches the end of the file
 		int i = 0;
@@ -52,13 +68,13 @@ public class AdminLogger {
 	}
 	
 	public static void write() throws IOException {
-		FileWriter newChadmin = new FileWriter("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\AdminList.txt");
+		FileWriter newAdminFile = new FileWriter("C:\\Users\\Edene\\eclipse-workspace\\The tester\\src\\AdminList.txt");
 		
 		for (int i = 0; i < adminConvert.size(); i++) {	
 			Admin a = adminConvert.get(i);
-			newChadmin.write(a.getUsername()+"-"+a.getPassword()+System.lineSeparator());
+			newAdminFile.write(a.getUsername()+"-"+a.getPassword()+System.lineSeparator());
 		}
-		newChadmin.close();
+		newAdminFile.close();
 	}
 
 	public static Vector<Admin> send(Vector<Admin> trainConvert) {

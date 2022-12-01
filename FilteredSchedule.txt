@@ -1,1 +1,4 @@
-Maine-New York-1400-1600
+SouthCarolina-Georgia-1030-1210
+SouthCarolina-Georgia-1030-1200
+SouthCarolina-Georgia-1040-1200
+Florida-Georgia-1040-1200

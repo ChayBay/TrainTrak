@@ -141,7 +141,6 @@ class mainMenu extends JFrame{
 	
 	public mainMenu() throws IOException {
 		
-		int padX = 100;
 		int padY = 100;
 		
 		setTitle("Main Menu");
@@ -158,9 +157,10 @@ class mainMenu extends JFrame{
 	    c.gridx = 0; // column
 	    c.gridy = 0; // row
 	    c.ipady = padY;
-	    c.anchor = GridBagConstraints.CENTER;
+	    c.anchor = GridBagConstraints.NORTH;
+	    c.fill = GridBagConstraints.VERTICAL;
 	    JLabel TrainTrek = new JLabel("Train Trak");
-	    TrainTrek.setFont(new Font("Comic Sans MS", Font.BOLD,30));
+	    TrainTrek.setFont(new Font("Impact", Font.BOLD,50));
 	    TrainTrek.setHorizontalAlignment(JLabel.CENTER);
 	    add(TrainTrek, c);
 			
@@ -176,16 +176,14 @@ class mainMenu extends JFrame{
 	
 	    c.gridx = 0;
 	    c.gridy = 2;
-	    c.anchor = GridBagConstraints.NORTH;
 	    c.weightx = 2;
-	    c.weighty = 2;
 	    JPanel MenuButtons = new JPanel();
 	    MenuButtons.setLayout(new GridBagLayout());
 	    GridBagConstraints mbc = new GridBagConstraints();
 	    mbc.insets = new Insets(20,20,20,20);
 	    
 	    //these are constant for both buttons
-	    mbc.weightx = 2;
+	    //mbc.weightx = 2;
 	    mbc.ipady = 20;
 	    mbc.fill = GridBagConstraints.BOTH;
 	    mbc.anchor = GridBagConstraints.CENTER;
@@ -208,7 +206,6 @@ class mainMenu extends JFrame{
 	    mbc.gridx = 1;
 	    mbc.gridy = 0;
 	    JButton admin = new JButton("ADMIN");
-	    
 	    admin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TrainTrak.log = new adminPopup();
@@ -217,7 +214,8 @@ class mainMenu extends JFrame{
 	    MenuButtons.add(admin, mbc);
 	    add(MenuButtons, c);
 	    getContentPane();
-	    setSize(700, 700);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(700, 700);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -352,7 +350,7 @@ class adminPage extends JFrame{
 				}
 		    });
 	    	train.add(delay,tSet);
-	    	if (loop.gridy > (TrainTrak.trainSched.size())/3) {
+	    	if (loop.gridy > (TrainTrak.trainSched.size())/5) {
 	    		loop.gridx += 1;
 	    		loop.gridy = 0;
 	    	}
@@ -364,7 +362,8 @@ class adminPage extends JFrame{
 	    add(routes, ad);
 	    
 	    getContentPane();
-	    setSize(900, 900);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(900, 900);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -527,7 +526,7 @@ class userPage extends JFrame{
 		    	ari.setHorizontalAlignment(JLabel.CENTER);
 		    	train.add(ari,tSet);
 		    	
-		    	if (loop.gridy > (TrainTrak.trainSched.size())/3) {
+		    	if (loop.gridy > (TrainTrak.trainSched.size())/5) {
 		    		loop.gridx += 1;
 		    		loop.gridy = 0;
 		    	}
@@ -540,7 +539,8 @@ class userPage extends JFrame{
 	    }    
 	    
 	    getContentPane();
-	    setSize(900, 900);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(900, 900);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -628,7 +628,8 @@ class adminPopup extends JFrame{
 		add(subHolder, out);
 		
 	    getContentPane();
-	    setSize(420, 305);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(420, 305);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -691,8 +692,14 @@ class addPopup extends JFrame{
 				String passF = passField.getText();
 				boolean check1 = TrainTrak.validator(userF, TrainTrak.textPat);
 				boolean check2 = TrainTrak.validator(passF, TrainTrak.textPat);
+				boolean check3 = false;
+				try {
+					check3 = AdminLogger.doubleCheck(userF);
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
 				
-				if (check1 && check2) {
+				if (check1 && check2 && check3==false) {
 					try {
 						AdminLogger.addAdmin(userF,passF);
 						JOptionPane.showMessageDialog(TrainTrak.addMin, "Admin Created!");
@@ -703,7 +710,12 @@ class addPopup extends JFrame{
 						e1.printStackTrace();
 					}
 				}else {
-					JOptionPane.showMessageDialog(TrainTrak.addMin, "Invalid input!\nOnly letter and numbers accepted!");
+					if((check1 && check2)==false) {
+						JOptionPane.showMessageDialog(TrainTrak.addMin, "Invalid input!\nOnly letter and numbers accepted!");
+					}
+					if(check3) {
+						JOptionPane.showMessageDialog(TrainTrak.addMin, "User Already Exist!");
+					}
 				}
 			}
 		});
@@ -714,7 +726,8 @@ class addPopup extends JFrame{
 		add(subHolder, out);
 		
 	    getContentPane();
-	    setSize(450, 305);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(450, 305);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -825,10 +838,10 @@ class routePopup extends JFrame{
 						e1.printStackTrace();
 					}
 				}else {
-					if(check1 == false || check2 == false) {
+					if((check1 && check2) == false) {
 						JOptionPane.showMessageDialog(TrainTrak.route, "Invalid input!\nOnly letter and numbers accepted in origin and destination boxes!");
 					}
-					if(check3 == false || check4 == false) {
+					if((check3 && check4) == false) {
 						JOptionPane.showMessageDialog(TrainTrak.route, "Invalid input!\nOnly 4 numbers accepted in departure and arrival boxes!");
 					}
 					if(check5 == false) {
@@ -847,7 +860,8 @@ class routePopup extends JFrame{
 		add(subHolder, out);
 		
 	    getContentPane();
-	    setSize(500, 500);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(500, 500);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -936,7 +950,8 @@ class delayPopup extends JFrame{
 		add(subHolder, out);
 		
 	    getContentPane();
-	    setSize(500, 250);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(500, 250);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -1013,7 +1028,8 @@ class origPopup extends JFrame{
 	    add(buttons, out);
 	    
 	    getContentPane();
-	    setSize(500, 500);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(500, 500);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -1090,7 +1106,8 @@ class destPopup extends JFrame{
 	    add(buttons, out);
 	    
 	    getContentPane();
-	    setSize(500, 500);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(500, 500);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -1168,7 +1185,8 @@ class departPopup extends JFrame{
 	    add(buttons, out);
 	    
 	    getContentPane();
-	    setSize(500, 500);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(500, 500);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
@@ -1246,7 +1264,8 @@ class arivPopup extends JFrame{
 	    add(buttons, out);
 		
 	    getContentPane();
-	    setSize(500, 500);
+	    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    //setSize(500, 500);
 	    setVisible(true);
 	    revalidate();
 	    repaint();
